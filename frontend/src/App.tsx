@@ -1,9 +1,21 @@
+import { FaHome,FaCheck,FaBuilding } from "react-icons/fa";
+
+
+interface BulletProps {
+  text: string;
+}
+export const Bullet: React.FC<BulletProps> = ({ text }) => (
+  <div className="flex items-center gap-x-2">
+    <FaCheck size={12} className="text-teal" />
+    <span className="text-black text-sm">{text}</span>
+  </div>
+);
 
 
 function App() {
 
   return (
-    <div className='bg-white min-h-screen w-full '>
+    <div className='bg-white min-h-screen w-full pb-12'>
       {/*Initial Header */}
         <div className=' flex flex-row flex-wrap bg-maroon font-roboto items-center py-20 px-5 gap-x-10'>
           {/*Left column */}
@@ -47,14 +59,85 @@ function App() {
               Our Services
             </h3>
           </div>
-        <div className='flex flex-row my-4 max-w-[80%]'>
-          
+
+        {/*Service Cards*/}
+        <div className="flex flex-col md:flex-row justify-center items-center my-4 w-full px-6 gap-x-6">
+
+          <div className="relative w-60 h-80 border-2 border-gray-200 rounded-sm shadow-lg flex flex-col items-center gap-y-2">
+            <FaHome className="mx-auto mt-12 text-teal" size={30} />
+            <h2 className="mx-auto text-maroon">
+              Residential Cleaning
+            </h2>
+            <div className=" absolute left-1/4 bottom-1/4 flex flex-col items-start gap-y-2 mt-2">
+              <Bullet text="House Exteriors" />
+              <Bullet text="Driveways" />
+              <Bullet text="Decks & Patios" />
+              <Bullet text="Fences & Gates" />
+            </div>
+          </div>
+
+          <div className="relative w-60 h-80 border-2 border-gray-200 rounded-sm shadow-lg flex flex-col items-center gap-y-2">
+            <FaBuilding className="mx-auto mt-12 text-teal" size={30} />
+            <h2 className="mx-auto text-maroon">
+              Commercial Cleaning
+            </h2>
+            <div className=" absolute left-1/4 bottom-1/4 flex flex-col items-start gap-y-2 mt-2">
+              <Bullet text="Office Buildings" />
+              <Bullet text="Parking lots" />
+              <Bullet text="Storefronts" />
+              <Bullet text="Warehouses" />
+            </div>
+          </div>
+
+
+        </div>{/*Service Cards*/}
+        
+        {/*Initial Header */}
+        <div className=' flex flex-row flex-wrap bg-maroon font-roboto items-center py-20 px-5 gap-x-10'>
+          {/*Left column */}
+          <div className=" justify-endflex-[1]">
+            <img className=' max-w-[100%] h-auto'
+              src='/placeholder.jpg'
+            />
+          </div>
+
+         
+
+          {/*Right column*/}
+          <div className="flex flex-col flex-nowrap  flex-[1]">
+            <h1 className='text-4xl font-bold text- py-3 '>
+              Professional Pressure <br>
+              </br>Washing Services
+            </h1>
+            <h3 className='mx-auto text-white mt-4'>
+              Trusted by homeowners and businesses alike, we restore your property’s beauty with powerful, professional pressure washing — safe, effective, and satisfaction guaranteed.
+            </h3>
+            <div className="flex flex-row flex-wrap gap-x-4 my-4 max-w-screen-sm  font-medium text-sm">
+              <a
+                className="px-7 py-3 bg-teal hover:bg-teal_hover  text-white shadow-md border border-white rounded-xl  mt-2 transition-all "
+                href="./Quote.tsx"
+              >
+                <div >Get Free Quote</div>
+
+              </a>
+              <a
+                className="px-7 py-3 bg-transparent hover:bg-white hover:bg-opacity-25 text-white shadow-md rounded-xl  border border-white mt-2 transition-colors duration-300"
+                href="./Services.tsx"
+              >
+                <div >View Services</div>
+              </a>
+            </div>
+
+          </div>
+        </div>
+        {/*About us */}
+
 
         </div>
-
-
-        </div>
+      {/*Whole Page */}
     </div>
+  
+
   
   );
 };
