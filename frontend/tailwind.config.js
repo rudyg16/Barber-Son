@@ -10,9 +10,15 @@ export default {
         roboto: ['"Roboto"', 'sans-serif'],
       },
       colors:{
-        maroon:'#7A0000',
-        teal:'#007373',
-        teal_hover:'#008080'
+        cream:'#FAF9F6',
+        maroon:'#650000',
+        rich_brown: '#2C3539',
+        teal:'#354F52',//dark sage
+        teal_hover:'#008080',
+        sage:'#52796F',
+        bright_sage:'#6A8B83',
+        mint:'#80CBC4',
+        bright_mint:'#9FD7D2'
       }
     },
   },
