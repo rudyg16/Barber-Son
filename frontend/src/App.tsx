@@ -1,6 +1,7 @@
 import { FaHome,FaCheck,FaBuilding } from "react-icons/fa";
 import About from './pages/About'
 import Quote from './pages/Quote'
+import Form from './components/Form'
 
 interface BulletProps {
   text: string;
@@ -131,7 +132,7 @@ function App() {
         {/*About us end*/}
         {/* Quote Section */}
         <div className='text-'>
-
+          <Form/>
         </div>
 
         </div>
