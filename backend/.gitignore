@@ -1,0 +1,14 @@
+# Node stuff
+node_modules/
+package-lock.json # optional if you don't track lockfile
+
+# Secrets
+.env
+
+# Build artifacts
+function.zip
+.serverless/
+.aws-sam/
+
+# IDE
+.vscode/

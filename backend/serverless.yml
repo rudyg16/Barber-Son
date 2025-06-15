@@ -1,0 +1,15 @@
+service: submit-form-api         # Name of your service/project
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-2
+
+functions:
+  submitForm:                   # Name of the function
+    handler: handler.submitForm # handler.js → export named submitForm
+    events:
+      - http:
+          path: form            # API Gateway route: POST /form
+          method: post
+          cors: true       
