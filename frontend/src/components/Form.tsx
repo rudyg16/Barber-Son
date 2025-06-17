@@ -42,15 +42,26 @@ const Form = () => {
     mode: 'onTouched',
   });
 
+  const fetchData = async (url:string) => {
+    try {
+      const response = await fetch(url)
+      const data = await response.json();
+      console.log(data)
+    }
+    catch (error) {
+      console.error("Request failed to send", error)
+    }
+  };
+
   const onSubmit = (data: FormValues) => {
-     // TODO: Hook to backend
+    fetchData();
     reset();
   };
 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="space-y-4 p-4 max-w-lg mx-auto rounded-md bg-mint bg-opacity-60 font-roboto"
+      className="space-y-4 p-4 max-w-lg mx-auto rounded-md bg-deep_blue  font-roboto md:px-10"
     >
       <div className="flex flex-col md:flex-row md:justify-center md:gap-x-6">
         {/* First Name */}

@@ -57,7 +57,7 @@ const Home: React.FC = () => {
             {/*End initial header */}
             <div className='flex flex-col mt-20 font-roboto'>
                 <div className='text-center'>
-                    <h3 className="text-3xl  font-bold text-rich_brown ">
+                    <h3 className="text-3xl  font-bold text-deep_blue ">
                         Our Services
                     </h3>
                 </div>
@@ -131,7 +131,8 @@ const Home: React.FC = () => {
                 </div>
                 {/*About us end*/}
                 {/* Quote Section */}
-                <div className='text-'>
+                <div className='flex flex-col'>
+                    <h1 className='mx-auto font-roboto'></h1>
                     <Form />
                 </div>
 
