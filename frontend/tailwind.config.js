@@ -11,14 +11,15 @@ export default {
       },
       colors:{
         cream:'#FAF9F6',
-        maroon:'#650000',
-        rich_brown: '#2C3539',
+        deep_blue:'#030380',
         teal:'#354F52',//dark sage
         teal_hover:'#008080',
         sage:'#52796F',
         bright_sage:'#6A8B83',
+
         mint:'#80CBC4',
-        bright_mint:'#9FD7D2'
+        bright_mint:'#9FD7D2',
+        logo_mint:'#B6FFBB'
       }
     },
   },

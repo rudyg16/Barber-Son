@@ -1,15 +1,16 @@
-service: submit-form-api         # Name of your service/project
+service: barber-son-api
 
 provider:
   name: aws
-  runtime: nodejs18.x
-  region: us-east-2
+  runtime: nodejs22.x        # match what's in AWS Console
+  region: us-east-2          # match your deployed region
 
 functions:
-  submitForm:                   # Name of the function
-    handler: handler.submitForm # handler.js → export named submitForm
+  submitForm:
+    name: submitForm         # ⚠ MUST match your Lambda name in Console
+    handler: handler.submitForm
     events:
       - http:
-          path: form            # API Gateway route: POST /form
+          path: form         # ⚠ MUST match existing API Gateway route
           method: post
-          cors: true       
+          cors: true         # If your frontend is on another domain

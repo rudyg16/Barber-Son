@@ -1,33 +1,6 @@
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
-
-
-export enum Service {
-  // Residential
-  HouseExteriors = "House Exteriors",
-  Driveways = "Driveways",
-  DecksPatios = "Decks & Patios",
-  FencesGates = "Fences & Gates",
-  WindowCleaning = "Window Cleaning",
-  GutterCleaning = "Gutter Cleaning",
-
-  // Commercial
-  OfficeBuildings = "Office Buildings",
-  ParkingLots = "Parking Lots",
-  Storefronts = "Storefronts",
-  Warehouses = "Warehouses",
-  DumpsterPads = "Dumpster Pads",
-}
-
-type FormValues = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phoneNumber: string;
-  service: Service;
-  address: string;
-  comments: string;
-};
+import { FormValues, Service } from '@/types/form'
 
 const formatPhone = (val: string): string => {
   const digits = val.replace(/\D/g , '').slice(0, 10);
@@ -77,7 +50,7 @@ const Form = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="space-y-4 p-4 max-w-lg mx-auto rounded-sm bg-mint font-roboto"
+      className="space-y-4 p-4 max-w-lg mx-auto rounded-md bg-mint bg-opacity-60 font-roboto"
     >
       <div className="flex flex-col md:flex-row md:justify-center md:gap-x-6">
         {/* First Name */}

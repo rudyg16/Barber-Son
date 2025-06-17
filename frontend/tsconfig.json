@@ -13,7 +13,16 @@
         "esModuleInterop": true,
         "resolveJsonModule": true,
         "isolatedModules": true,
-        "noEmit": true
+        "noEmit": true,
+        "baseUrl": ".", //project root
+        "paths": {
+            "@/*": [
+                "src/*"
+            ],
+            "@public/*": [
+                "public/*"
+            ]
+        }
     },
     "include": [
         "src"
