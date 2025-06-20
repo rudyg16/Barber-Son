@@ -1,6 +1,7 @@
 import React from 'react'
 import { FaHome, FaCheck, FaBuilding } from "react-icons/fa";
 import Form from '@/components/Form'
+import {Link} from "react-router-dom";
 
 import { HiMiniArrowTopRightOnSquare } from "react-icons/hi2";
 
@@ -30,20 +31,17 @@ const Home: React.FC = () => {
                         Trusted by homeowners and businesses alike, we restore your property’s beauty with powerful, professional pressure washing — safe, effective, and satisfaction guaranteed.
                     </h3>
                     <div className="flex flex-row flex-wrap gap-x-4 my-4 max-w-screen-sm  font-medium text-sm">
-                        <a
+                        <Link to="/quote"
                             className="px-7 py-3 bg-gradient-to-tr from-blue-400 via-blue-500 to-indigo-400 text-white shadow-md border border-white  rounded-xl  mt-2 
                             transform transition-transform hover:-translate-y-[2px] duration-300 "
-                            href="/Quote"
                         >
                             <div >Get a Free Quote</div>
-                        </a>
-                        <a
+                        </Link>
+                        <Link to="/services"
                             className="px-7 py-3 bg-transparent hover:bg-white hover:bg-opacity-20 text-white shadow-md rounded-xl  border border-white mt-2 
-                            transform transition-transform hover:-translate-y-[2px]  duration-300"
-                            href="./Services.tsx"
-                        >
+                            transform transition-transform hover:-translate-y-[2px]  duration-300">
                             <div >View our services</div>
-                        </a>
+                        </Link>
                     </div>
 
                 </div>
@@ -119,15 +117,14 @@ const Home: React.FC = () => {
                             Barber & Son is a family-owned pressure washing company built on trust, quality, and a commitment to doing things right. We treat every home and business like it's our own, using eco-friendly methods and a personal touch that bigger companies often miss. When you work with us, you're not just getting a service, you're supporting a family that cares about the results just as much as you do.
                         </h3>
                         <div className='flex mt-4'>
-                            <a
+                            <Link to='/about'
                             className=" justify-between ml-0 mr-auto px-4 py-3 bg-gradient-to-tr from-blue-400 via-blue-500 to-indigo-400 text-white shadow-md border border-white  rounded-xl  
-                            transform transition-transform hover:-translate-y-[2px] duration-300 "
-                            href="/About">
+                            transform transition-transform hover:-translate-y-[2px] duration-300 ">
                                 <div className='flex flex-row flex-nowrap gap-x-1 w-full h-full'>
                                     <div>About us</div>
                                     <HiMiniArrowTopRightOnSquare size={22} className=''/>
                                 </div>
-                            </a>
+                            </Link>
                             
                         </div>
 
