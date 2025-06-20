@@ -4,6 +4,7 @@ import Home from './pages/Home'
 import About from './pages/About'
 import Contact from './pages/Contact'
 import Quote from './pages/Quote'
+import Services from './pages/Services'
 
 function App() {
 
@@ -13,7 +14,7 @@ function App() {
       <Route path='/about' element={<About/>}/>
       <Route path='/contact' element={<Contact/>} />
       <Route path='/quote' element={<Quote />} />
-
+      <Route path='/services' element={<Services />} />
     </Routes>
   );
 };
