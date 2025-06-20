@@ -1,6 +1,7 @@
 import React from 'react'
 import { FaHome, FaCheck, FaBuilding } from "react-icons/fa";
 import Form from '@/components/Form'
+
 import { HiMiniArrowTopRightOnSquare } from "react-icons/hi2";
 
 interface BulletProps {
