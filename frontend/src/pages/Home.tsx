@@ -1,6 +1,7 @@
 import React from 'react'
 import { FaHome, FaCheck, FaBuilding } from "react-icons/fa";
 import Form from '@/components/Form'
+import { HiMiniArrowTopRightOnSquare } from "react-icons/hi2";
 
 interface BulletProps {
   text: string;
@@ -9,7 +10,7 @@ interface BulletProps {
 export const Bullet: React.FC<BulletProps> = ({ text }) => (
   <div className="flex items-center gap-x-2">
     <FaCheck size={12} className="text-green-600" />
-    <span className="text-black text-sm">{text}</span>
+    <span className="text-white text-sm">{text}</span>
   </div>
 );
 
@@ -33,15 +34,14 @@ const Home: React.FC = () => {
                             transform transition-transform hover:-translate-y-[2px] duration-300 "
                             href="/Quote"
                         >
-                            <div >Get Free Quote</div>
-
+                            <div >Get a Free Quote</div>
                         </a>
                         <a
                             className="px-7 py-3 bg-transparent hover:bg-white hover:bg-opacity-20 text-white shadow-md rounded-xl  border border-white mt-2 
-                            transform transition-transform hover:-translate-y-[2px] transition-colors duration-300"
+                            transform transition-transform hover:-translate-y-[2px]  duration-300"
                             href="./Services.tsx"
                         >
-                            <div >View Services</div>
+                            <div >View our services</div>
                         </a>
                     </div>
 
@@ -65,10 +65,10 @@ const Home: React.FC = () => {
                 {/*Service Cards*/}
                 <div className="flex flex-col md:flex-row justify-center items-center my-4 w-full px-6 gap-x-6">
 
-                    <div className="relative w-[250px] h-[325px] border-2 border-gray-200 rounded-sm shadow-lg flex flex-col items-center gap-y-2">
+                    <div className="relative w-[250px] h-[325px] border-2 bg-deep_blue rounded-sm shadow-lg flex flex-col items-center gap-y-2">
 
-                        <FaHome className="mx-auto mt-12  text-maroon" size={30} />
-                        <h2 className="mx-auto text-rich_brown font-bold">
+                        <FaHome className="mx-auto mt-12  text-white" size={30} />
+                        <h2 className="mx-auto text-rich_brown text-white font-bold">
                             Residential Cleaning
                         </h2>
 
@@ -82,9 +82,9 @@ const Home: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="relative w-[250px] h-[325px] border-2 border-gray-200 rounded-sm shadow-lg flex flex-col items-center gap-y-2">
-                        <FaBuilding className="mx-auto mt-12 text-maroon" size={30} />
-                        <h2 className="mx-auto text-rich_brown font-bold">
+                    <div className="relative w-[250px] h-[325px] border-2 bg-deep_blue rounded-sm shadow-lg flex flex-col items-center gap-y-2">
+                        <FaBuilding className="mx-auto mt-12 text-white" size={30} />
+                        <h2 className="mx-auto text-white font-bold">
                             Commercial Cleaning
                         </h2>
                         <div className=" absolute left-[20%] bottom-[30%] flex flex-col items-start gap-y-2 mt-2">
@@ -117,15 +117,18 @@ const Home: React.FC = () => {
                         <h3 className='mx-auto text-black mt-4 flex-shrink-0'>
                             Barber & Son is a family-owned pressure washing company built on trust, quality, and a commitment to doing things right. We treat every home and business like it's our own, using eco-friendly methods and a personal touch that bigger companies often miss. When you work with us, you're not just getting a service, you're supporting a family that cares about the results just as much as you do.
                         </h3>
-                        <a
-                            href="./Quote.tsx"
-                            className=" w-fit flex px-5 py-3 my-7 bg-sage hover:bg-bright_sage rounded-xl border transition-colors duration-300
-                 text-white font-medium text-sm border-1 border-gray-300 shadow-md">
-                            About us
-                        </a>
-
-
-
+                        <div className='flex mt-4'>
+                            <a
+                            className=" justify-between ml-0 mr-auto px-4 py-3 bg-gradient-to-tr from-blue-400 via-blue-500 to-indigo-400 text-white shadow-md border border-white  rounded-xl  
+                            transform transition-transform hover:-translate-y-[2px] duration-300 "
+                            href="/About">
+                                <div className='flex flex-row flex-nowrap gap-x-1 w-full h-full'>
+                                    <div>About us</div>
+                                    <HiMiniArrowTopRightOnSquare size={22} className=''/>
+                                </div>
+                            </a>
+                            
+                        </div>
 
                     </div>
                 </div>

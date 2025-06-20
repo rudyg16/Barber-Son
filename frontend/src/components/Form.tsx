@@ -42,11 +42,25 @@ const Form = () => {
     mode: 'onTouched',
   });
 
-  const fetchData = async (url:string) => {
+  const submitFormData = async (url:string,data:FormValues) => {
     try {
-      const response = await fetch(url)
-      const data = await response.json();
-      console.log(data)
+      console.log(url);
+      console.log(JSON.stringify(data));
+      const response = await fetch(url,{
+        method:'POST',
+        headers:{
+          "Content-Type":"application/json",
+        },
+        body:JSON.stringify(data)
+      });
+      const text = await response.text();
+      try{
+          const json = JSON.parse(text);
+          console.log("Server returned:",json);
+      }
+      catch{
+        console.error("Response was not JSON",text);
+      }
     }
     catch (error) {
       console.error("Request failed to send", error)
@@ -54,22 +68,28 @@ const Form = () => {
   };
 
   const onSubmit = (data: FormValues) => {
-    fetchData();
+    const apiUrl = import.meta.env.VITE_API_GATEWAY_URL;
+    console.log("Resolved API URL:", apiUrl); //test
+    submitFormData(apiUrl, data);
     reset();
   };
+  
 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="space-y-4 p-4 max-w-lg mx-auto rounded-md bg-deep_blue  font-roboto md:px-10"
+      className="space-y-4 py-10 px-6 max-w-lg mx-auto  bg-white border shadow-xl border-gray-300 font-roboto "
     >
       <div className="flex flex-col md:flex-row md:justify-center md:gap-x-6">
         {/* First Name */}
         <div className="flex flex-col w-full">
+          <div className='text-black font-semibold'>
+            First Name
+          </div>
           <input
             {...register('firstName', { required: 'First Name is required' })}
             placeholder="First Name"
-            className="border p-2 my-1"
+            className="border border-gray-300 p-2 my-1 "
           />
           {errors.firstName && (
             <p className="text-red-500 text-sm">{errors.firstName.message}</p>
@@ -77,11 +97,15 @@ const Form = () => {
         </div>
 
         {/* Last Name */}
+
         <div className="flex flex-col w-full">
+          <div className='text-black font-semibold'>
+           Last Name
+          </div>
           <input
             {...register('lastName', { required: 'Last Name is required' })}
             placeholder="Last Name"
-            className="border p-2 my-1"
+            className="border border-gray-300 p-2 my-1"
           />
           {errors.lastName && (
             <p className="text-red-500 text-sm">{errors.lastName.message}</p>
@@ -91,6 +115,9 @@ const Form = () => {
 
       {/* Email */}
       <div>
+        <div className='text-black font-semibold'>
+          Email
+        </div>
         <input
           {...register('email', {
             required: 'Email is required',
@@ -100,7 +127,7 @@ const Form = () => {
             },
           })}
           placeholder="Email"
-          className="w-full border p-2 my-1"
+          className="w-full border border-gray-300 p-2 my-1"
         />
         {errors.email && (
           <p className="text-red-500 text-sm">{errors.email.message}</p>
@@ -109,6 +136,9 @@ const Form = () => {
 
       {/* Phone Number */}
       <div>
+        <div className='text-black font-semibold'>
+          Phone 
+        </div>
         <input
           {...register('phoneNumber',{
             required:'Phone number is required',
@@ -117,17 +147,20 @@ const Form = () => {
             }
           })}
           placeholder='(123) 456-7890'
-          className='w-full border p-2'
+          className='w-full border border-gray-300 p-2'
         />
         
       </div>
 
       {/* Address */}
       <div>
+        <div className='text-black font-semibold'>
+          Address
+        </div>
         <input
           {...register('address', { required: 'Address is required' })}
           placeholder="Street Address"
-          className="w-full border p-2 my-1"
+          className="w-full border border-gray-300 p-2 my-1"
         />
         {errors.address && (
           <p className="text-red-500 text-sm">{errors.address.message}</p>
@@ -136,9 +169,12 @@ const Form = () => {
 
       {/* Service Select */}
       <div>
+        <div className='text-black font-semibold'>
+          Service
+        </div>
         <select
           {...register('service', { required: 'Please select a service' })}
-          className="w-full border p-2 my-1"
+          className="w-full border border-gray-300 p-2 my-1"
           defaultValue=""
         >
           <option value="" disabled>
@@ -160,7 +196,7 @@ const Form = () => {
         <textarea
           {...register('comments')}
           placeholder="Additional Comments (optional)"
-          className="w-full border p-2 my-1"
+          className="w-full border border-gray-300 p-2 my-1"
           rows={4}
         />
       </div>
