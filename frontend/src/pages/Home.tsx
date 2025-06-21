@@ -2,9 +2,10 @@ import React from 'react'
 import Form from '@/components/Form'
 import {Link} from "react-router-dom";
 
-import { FaHome, FaCheck, FaBuilding } from "react-icons/fa";
+import { FaHome, FaCheck, FaBuilding ,FaPhone} from "react-icons/fa";
 import { HiMiniArrowTopRightOnSquare } from "react-icons/hi2";
 import { MdOutlineSubdirectoryArrowRight } from "react-icons/md";
+import { FaArrowRightLong } from "react-icons/fa6";
 
 interface BulletProps {
   text: string;
@@ -29,11 +30,33 @@ const Home: React.FC = () => {
                 />
 
                 <div className="absolute inset-y-0 left-0 w-full  bg-gradient-to-r from-deep_blue via-blue-600 to-transparent z-10 opacity-80" />
+                <div className='absolute top-1/3 left-8 z-20'>
+                    <div className='flex flex-col no-wrap items-start'>
+                        <h2 className='text-logo_mint font-bold text-3xl md:text-4xl'>COMMERCIAL & RESIDENTIAL</h2>
+                        <h1 className="text-white font-poppins font-semibold text-5xl md:text-6xl">
+                            DALLAS PROFESSIONAL <br />
+                            PRESSURE WASHING
+                        </h1>
+                        <div className='flex flex-row gap-x-4 flex-wrap mt-4 '>
+                            <Link to="/quote"
+                                className="group px-5 py-3 bg-transparent hover:bg-white hover:bg-opacity-20 text-white font-roboto shadow-md rounded-xl  border border-gray-300 mt-2 
+                                    transform transition-transform hover:-translate-y-1  duration-300">
+                                <div className='flex flex-row flex-nowrap gap-x-2 w-full h-full mt-[2px]'>
+                                    <div className='text-xl'>Get a FREE Quote Today</div>
+                                    <FaArrowRightLong size={22} className='group-hover:translate-x-1 mt-1 duration-500 transition-transform ' />
+                                </div>
+                            </Link>
+                            <a href= 'tel:+2149973143' className='py-3 px-5 border border-white rounded-xl text-white mt-2 
+                            hover:-translate-y-1  hover:bg-white hover:bg-opacity-20 transition-transform duration-300'>
+                                <div className='flex flex-row flex-nowrap gap-x-2 w-full h-full mt-[2px]'>
+                                    <FaPhone className='mt-[2px]'size={24}/>
+                                    <div className=' font text-xl font-semibold font-roboto'>(214){' '}997-3143</div>
+                                </div>
 
-                <h1 className="absolute top-1/3 left-8 z-20 text-white font-poppins font-semibold text-6xl">
-                    DALLAS PROFESSIONAL <br />
-                    PRESSURE WASHING
-                </h1>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
 
 
