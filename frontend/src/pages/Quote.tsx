@@ -5,7 +5,7 @@ import { IoLocationSharp } from "react-icons/io5";
 
 const Quote: React.FC = () => {
     return (
-        <div className='bg-white min-h-screen'>
+        <div className=' bg-white md:bg-gradient-to-tr from-blue-100 via-blue-400 to-blue-100 min-h-screen'>
             <div className='grid grid-cols-1 md:grid-cols-2 gap-4 md:mx-16 '>
                 <div className='flex flex-col no-wrap gap-y-2 items-center justify-center my-12 md:mt-0'>
                     <div className='flex text-deep_blue text-3xl mx-auto font-poppins font-extrabold'>
@@ -30,7 +30,7 @@ const Quote: React.FC = () => {
                         </div>
                     </div>
                 </div>
-                <div className=' md:ml-0 md:mr-auto'>
+                <div className=' md:ml-0 md:mr-auto md:py-28'>
                     <Form />
                 </div>
             </div>
