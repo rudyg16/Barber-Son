@@ -34,7 +34,7 @@ jobs:
         uses: aws-actions/setup-sam@v2
 
       - name: Build Serverless Application
-        run: sam build --use-container --template backend/template.yaml # Use --use-container if your Lambda has native dependencies
+        run: sam build --template backend/template.yaml # Use --use-container if your Lambda has native dependencies
 
       - name: Deploy Serverless Application
         run: |
