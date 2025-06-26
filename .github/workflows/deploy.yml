@@ -42,7 +42,7 @@ jobs:
             --no-confirm-changeset \
             --no-fail-on-empty-changeset \
             --stack-name mongo-form-handler-stack \
-            --resolve-s3 \ #
+            --resolve-s3 \ 
             --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND
         env:
           NODE_ENV: production # Example: Pass env var to Lambda at deploy
