@@ -1,0 +1,92 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: A simple form handler API for Barber-Son.
+
+Parameters:
+  MongoUriSecretArn:
+    Type: String
+    Description: The ARN of the AWS Secrets Manager secret containing the MongoDB URI.
+
+Resources:
+  FormHandlerLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      # Corrected Handler: It's now 'handler.handler' because handler.js is the file.
+      # The first 'handler' refers to the file handler.js (without the .js extension).
+      # The second '.handler' refers to the exported 'handler' function within that file.
+      Handler: handler.handler 
+      Runtime: nodejs22.x # Sticking with LTS recommendation. Change to nodejs22.x if you prefer.
+      CodeUri: ./backend/src/mongo-form-handler/ 
+      MemorySize: 256 # Good starting point
+      Timeout: 30
+      Role: !GetAtt LambdaExecutionRole.Arn
+      
+      Environment:
+        Variables:
+          MONGO_URI_SECRET_NAME: !Ref MongoUriSecretArn
+          AWS_REGION: !Ref AWS::Region
+      
+      VpcConfig:
+        SecurityGroupIds:
+          - sg-0656d772a0e36fd6e 
+        SubnetIds:
+          - subnet-042116f154f97bf08 
+          - subnet-0e931e74961340d12 
+      
+      Events:
+        CatchAllApi:
+          Type: HttpApi
+          Properties:
+            Path: /{proxy+}
+            Method: ANY
+            ApiId: !Ref FormHttpApiGateway
+
+  FormHttpApiGateway:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      StageName: Prod
+      CorsConfiguration:
+        AllowHeaders:
+          - Content-Type
+          - X-Amz-Date
+          - Authorization
+          - X-Api-Key
+          - X-Amz-Security-Token
+        AllowMethods:
+          - GET
+          - POST
+          - PUT
+          - DELETE
+          - OPTIONS
+        AllowOrigins:
+          - 'https://barberpressure.com' 
+          # - 'http://localhost:3000' # Add for local development
+        MaxAge: 300
+
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
+      Policies:
+        - PolicyName: SecretsManagerAccessPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "secretsmanager:GetSecretValue"
+                Resource: !Ref MongoUriSecretArn 
+
+Outputs:
+  FormApiUrl:
+    Description: "HTTP API Gateway endpoint URL for Form Handler"
+    Value: !Sub "https://${FormHttpApiGateway}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
