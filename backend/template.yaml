@@ -18,7 +18,7 @@ Resources:
       Runtime: nodejs22.x # Sticking with LTS recommendation. Change to nodejs22.x if you prefer.
       # Corrected CodeUri: Points to the directory containing handler.js
       CodeUri: ./backend/src/mongo-form-handler/ 
-      MemorySize: 256 # Good starting point
+      MemorySize: 350 # Good starting point
       Timeout: 30
       Role: !GetAtt LambdaExecutionRole.Arn
       
@@ -61,7 +61,7 @@ Resources:
           - OPTIONS
         AllowOrigins:
           - 'https://barberpressure.com' 
-          # - 'http://localhost:3000' # Add for local development
+          - 'http://localhost:3000' # Add for local development
         MaxAge: 300
 
   LambdaExecutionRole:
