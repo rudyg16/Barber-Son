@@ -7,6 +7,7 @@ on:
     paths:
       - 'backend/**' # Trigger only if changes are in the backend folder
       - 'template.yaml' # Trigger if your SAM template changes (if it's in the root)
+      - '.github/workflows/deploy.yml'
 
 jobs:
   deploy:
