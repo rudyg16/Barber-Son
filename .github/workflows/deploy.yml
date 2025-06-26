@@ -39,7 +39,7 @@ jobs:
       - name: Deploy Serverless Application
         run: |
           sam deploy \
-            --template backend/template.yaml\
+            --template backend/template.yaml \
             --no-confirm-changeset \
             --no-fail-on-empty-changeset \
             --stack-name mongo-form-handler-stack \
