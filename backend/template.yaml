@@ -15,7 +15,7 @@ Resources:
       # The first 'handler' refers to the file handler.js (without the .js extension).
       # The second '.handler' refers to the exported 'handler' function within that file.
       Handler: handler.handler 
-      Runtime: nodejs20.x # Sticking with LTS recommendation. Change to nodejs22.x if you prefer.
+      Runtime: nodejs22.x # Sticking with LTS recommendation. Change to nodejs22.x if you prefer.
       # Corrected CodeUri: Points to the directory containing handler.js
       CodeUri: ./backend/src/mongo-form-handler/ 
       MemorySize: 256 # Good starting point
