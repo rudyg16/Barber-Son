@@ -1,6 +1,5 @@
 
-const {LambdaClient,InvokeCommand} = require("@aws-sdk/client-lambda");
-
+const fetch = require('node-fetch');
 const AWS_LAMBDA_FUNCTION_URL = process.env.AWS_MONGOHANDLER_LAMBDA_URL;
 const AWS_REGION = 'us-east-1';
 
@@ -86,30 +85,23 @@ exports.handler = async (event, context) => {
         };
 
         // --- Invoke AWS Lambda Function ---
-        const invokeCommand = new InvokeCommand({
-            // FunctionName can be the Function ARN or Function Name.
-            // For Function URLs, it's easier to just call the URL directly via HTTP.
-            // However, if you are making server-to-server call using AWS SDK,
-            // the FunctionName is the actual Lambda function name.
-            // Let's assume AWS_LAMBDA_FUNCTION_URL_MONGO_HANDLER is the URL.
-            // For calling an AWS_IAM secured Function URL, you'd typically use a library like 'aws4'
-            // or an HTTP client that integrates with AWS SDK for signing.
+        
 
-            // Given your AWS Lambda uses IAM auth and your Netlify Function is Lambda-based,
-            // the most straightforward (and secure) way is to invoke it directly via the SDK,
-            // using its function name, not its URL.
-            FunctionName: new URL(AWS_LAMBDA_FUNCTION_URL).pathname.split('/').pop(), // Extracts function name from URL path
-            Payload: JSON.stringify(payloadForAwsLambda),
+        // Send the request to the AWS Lambda Function URL
+        const awsLambdaResponse = await fetch(AWS_LAMBDA_FUNCTION_URL, {
+            method: 'POST', // Function URLs typically expect POST for invocation
+            headers: {
+                'Content-Type': 'application/json',
+                // Add any other headers required by your Lambda Function URL, e.g., Authorization
+            },
+            body: JSON.stringify(payloadForAwsLambda),
         });
 
-        // Send the command and get response from AWS Lambda
-        const awsLambdaResponse = await lambdaClient.send(invokeCommand);
-
         // Process AWS Lambda's response
-        const awsLambdaPayload = JSON.parse(Buffer.from(awsLambdaResponse.Payload).toString());
+        const awsLambdaPayload = await awsLambdaResponse.json();
 
         // Return the response from AWS Lambda directly to the browser
-        return createBrowserResponse(awsLambdaPayload.statusCode, JSON.parse(awsLambdaPayload.body), awsLambdaPayload.headers);
+        return createBrowserResponse(awsLambdaResponse.status, awsLambdaPayload, awsLambdaResponse.headers);
 
     } catch (error) {
         console.error("Netlify Function: Error during Lambda invocation or processing:", error);

@@ -12,12 +12,12 @@ command = "npm run build"
 
 [[redirects]]
   from = "/api/formsubmissions"
-  to = "/.netlify/functions/handler" # Still points to the /handler endpoint
+  to = "/.netlify/functions/submissions"
   status = 200
 
 [[redirects]]
   from = "/api/formsubmissions/*"
-  to = "/.netlify/functions/handler"
+  to = "/.netlify/functions/submissions"
   status = 200
 
 [functions]
