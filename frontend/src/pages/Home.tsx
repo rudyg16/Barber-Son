@@ -112,30 +112,15 @@ const Home: React.FC = () => {
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#030380" fill-opacity="1" 
                 d="M0,192L48,197.3C96,203,192,213,288,213.3C384,213,480,203,576,170.7C672,139,768,85,864,64C960,43,1056,53,1152,90.7C1248,128,1344,192,1392,224L1440,256L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path></svg>
 
-                {/* About Us */}
+              
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" className='-mt-1'>
                     <path fill="#fef9f2" fillOpacity="1"
                         d="M0,192L48,176C96,160,192,128,288,144C384,160,480,224,576,229.3C672,235,768,181,864,176C960,171,1056,213,1152,234.7C1248,256,1344,256,1392,256L1440,256V0H1392C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0H0Z">
                     </path>
                 </svg>
+                {/* About Us */}
 
-                <div className="bg-cream py-20 px-6 font-roboto">
-                    <div className="max-w-4xl mx-auto flex flex-col items-center text-center">
-                        <img src='/placeholder.jpg' alt="Barber & Son" className='w-full max-w-md mb-8 rounded-xl shadow-md' />
-                        <h2 className='text-4xl md:text-5xl font-bold text-rich_brown mb-6'>About Barber & Son</h2>
-                        <p className='text-lg text-black leading-relaxed'>
-                            Barber & Son is a family-owned pressure washing company built on trust, quality, and a commitment to doing things right.
-                            We treat every home and business like it's our own, using eco-friendly methods and a personal touch that bigger companies often miss.
-                        </p>
-                        <p className='text-lg text-black mt-4 leading-relaxed'>
-                            When you work with us, you're not just getting a service — you're supporting a family that cares about the results just as much as you do.
-                        </p>
-                        <Link to='/about' className="group mt-6 inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-tr from-blue-400 via-blue-500 to-indigo-400 text-white rounded-xl shadow-md border border-white transition-transform transform hover:-translate-y-1 duration-300">
-                            <span className='text-lg font-medium'>About Us</span>
-                            <HiMiniArrowTopRightOnSquare size={22} />
-                        </Link>
-                    </div>
-                </div>
+            
 
 
                 {/*About us end*/}

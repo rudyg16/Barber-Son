@@ -1,5 +1,5 @@
 import React from 'react';
-import { GiWaterRecycling } from "react-icons/gi";
+import { Link } from 'react-router-dom';
 
 const Navbar:React.FC = () => {
     return(
@@ -10,13 +10,20 @@ const Navbar:React.FC = () => {
             className='h-32 w-auto'>
             </img>
             </a>
-            <div className='flex flex-row justify-between mx-6 gap-x-4'>
-                <div>
+            <div className='flex flex-row justify-between mx-6 gap-x-2 mt-2'>
+
+                <Link to='/about' className='text-black text-lg font-medium bg-white px-6 py-3 hover:-translate-y-[2px] rounded-lg transition-all duration-300'>
                     About
-                </div>
-                <div>
-                    Contact
-                </div>
+                </Link>
+                <Link to='/contact' className='text-black text-lg  font-medium bg-white px-6 py-3 hover:-translate-y-[2px] rounded-lg transition-all duration-300'>
+                    Contact Us
+                </Link>
+                <Link to='/quote' className='text-white text-center  text-lg font-medium bg-deep_blue px-6 py-3  rounded-full transition-all duration-300'>
+                    Get a Quote
+                </Link>
+
+            
+                
             </div>
         </div>
 
