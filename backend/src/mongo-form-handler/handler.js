@@ -82,12 +82,12 @@ exports.handler = async (event) => {
         if (httpMethod === 'POST' && path === '/formSubmission') {
             const requestBody = event.body ? JSON.parse(event.body) : {};
 
-            if (Object.keys(requestBody).length === 0) {
-                return {
+            if (Object.keys(requestBody).length === 0) {//Object.keys() returns an array of an objects enumerable string keyed property names
+                return {//So for a json it would return a string array of the keys for the key value pairs 
                     statusCode: 400,
                     headers: {
                         "Content-Type": "application/json",
-                        "Access-Control-Allow-Origin": "*", // Adjust for production
+                        "Access-Control-Allow-Origin": "https://barberpressure.com", // Adjust for production
                         "Access-Control-Allow-Methods": "POST,OPTIONS",
                         "Access-Control-Allow-Headers": "Content-Type"
                     },
@@ -96,7 +96,7 @@ exports.handler = async (event) => {
             }
 
             // Define the collection where you want to store form data
-            const formSubmissionsCollection = dbClient.collection("formSubmissions");
+            const formSubmissionsCollection = dbClient.collection("submissions");
 
             // Insert the form data into the collection
             const result = await formSubmissionsCollection.insertOne({
@@ -117,13 +117,21 @@ exports.handler = async (event) => {
                     insertedId: result.insertedId
                 }),
             };
-        } else if (httpMethod === 'OPTIONS') {
-            // Handle CORS preflight requests
+        }
+        else if(httpMethod == 'GET' && path == '/formSubmission/GET'){
+
+        }
+        else if(httpMethod == 'PATCH' && path =='/formPatch') {
+
+        }
+
+        else if (httpMethod === 'OPTIONS' && path =='') {
+            // Handle CORS preflight requests (Before browser sends actual request)
             return {
                 statusCode: 204, // No Content
                 headers: {
-                    "Access-Control-Allow-Origin": "*", // Must match the AllowedOrigins in template.yaml
-                    "Access-Control-Allow-Methods": "POST,OPTIONS",
+                    "Access-Control-Allow-Origin": "https://barberpressure.com", // Must match the AllowedOrigins in template.yaml
+                    "Access-Control-Allow-Methods": "POST,OPTIONS,GET,PATCH",
                     "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
                     "Access-Control-Max-Age": "300"
                 },

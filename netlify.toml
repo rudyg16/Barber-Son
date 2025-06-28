@@ -3,5 +3,23 @@ base = "frontend"
 publish = "dist"
 command = "npm run build"
 
+[[redirects]]
+  from = "https://barberpressure.netlify.app/*"
+  to = "https://barberpressure.com/:splat"
+  status = 301
+  force = true # Ensures this redirect takes precedence over others
+
+# Catch-all for API routes and rewrite them to your single handler function
+[[redirects]]
+  from = "/api/formsubmissions"        # For collection actions (GET all, POST new)
+  to = "/.netlify/functions/handler" 
+  status = 200
+
+[[redirects]]
+  from = "/api/formsubmissions/*"      # For single item actions (GET, PATCH, DELETE by ID)
+  to = "/.netlify/functions/handler"  
+  status = 200
+
+
 [functions]
     directory = "backend"
