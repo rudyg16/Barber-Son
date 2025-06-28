@@ -42,44 +42,77 @@ const Form = () => {
     mode: 'onTouched',
   });
 
-  const submitFormData = async (url:string,data:FormValues) => {
+  const submitFormData = async (url: string, data: FormValues) => {
     try {
-      console.log(url);
-      console.log(JSON.stringify(data));
-      const response = await fetch(url,{
-        method:'POST',
-        headers:{
-          "Content-Type":"application/json",
+      console.log("Sending request to:", url);
+      console.log("Request body:", JSON.stringify(data));
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json",
+          // You might add an "Accept: application/json" header here too if your API consistently returns JSON
+          // "Accept": "application/json",
         },
-        body:JSON.stringify(data)
+        body: JSON.stringify(data)
       });
+
       const text = await response.text();
-      try{
-          const json = JSON.parse(text);
-          console.log("Server returned:",json);
+      if (!response.ok) {
+        // If response.ok is false (e.g., 4xx or 5xx status code)
+        let errorMessage = `Server responded with status ${response.status}.`;
+        try {
+          const errorJson = JSON.parse(text);
+          errorMessage = errorJson.message || errorMessage;
+          console.error("Server error details:", errorJson);
+        } catch {
+          console.error("Server responded with non-JSON error for status", response.status, ":", text);
+        }
+        throw new Error(errorMessage);
       }
-      catch{
-        console.error("Response was not JSON",text);
+
+      try {
+        const json = JSON.parse(text);
+        console.log("Server returned (success):", json);
+        // You can return the parsed data if needed for further processing
+        return json;
+      } catch {
+        console.error("Response was not JSON (but status was OK):", text);
+        // This indicates a successful but unexpected response format
+        throw new Error("Unexpected response format from server, but request was successful.");
       }
-    }
-    catch (error) {
-      console.error("Request failed to send", error)
+    } catch (error) {
+      console.error("Request failed to send:", error);
+      // Re-throw the error so onSubmit can catch and display it
+      throw error;
     }
   };
 
-  const onSubmit = (data: FormValues) => {
-    const apiUrl = import.meta.env.VITE_API_GATEWAY_URL;
-    console.log("Resolved API URL:", apiUrl); //test
-    submitFormData(apiUrl, data);
-    reset();
+  const onSubmit = async (data: FormValues) => { // Make onSubmit async as well
+    // IMPORTANT CHANGE HERE:
+    // import.meta.env.VITE_API_BASE_PATH should hold "/api/"
+    // Then you append your specific resource path "/formsubmissions"
+    const apiEndpoint = `${import.meta.env.VITE_API_BASE_PATH}formsubmissions`;
+
+    console.log("Resolved API Endpoint:", apiEndpoint); // This should now log "/api/formsubmissions"
+
+    try {
+      await submitFormData(apiEndpoint, data); // Pass the correct, relative API endpoint
+      reset(); // Clear the form on successful submission
+      alert('Your message has been sent successfully!'); // User feedback
+    } catch (error: any) { // Use 'any' for error type if not strictly defining custom errors
+      console.error("Form submission failed:", error);
+      alert(`There was an issue submitting your form: ${error.message}`); // Inform user
+    }
   };
-  
 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="space-y-4 py-10 px-6 max-w-lg mx-auto  bg-white border shadow-xl border-gray-300 font-roboto "
+      className="space-y-4 py-10 px-6 max-w-lg mx-auto bg-white border shadow-xl border-gray-300 font-roboto"
     >
+      {/* ... (Your existing form fields and JSX remain unchanged) ... */}
+
       <div className="flex flex-col md:flex-row md:justify-center md:gap-x-6">
         {/* First Name */}
         <div className="flex flex-col w-full">
@@ -97,10 +130,9 @@ const Form = () => {
         </div>
 
         {/* Last Name */}
-
         <div className="flex flex-col w-full">
           <div className='text-black font-semibold'>
-           Last Name
+            Last Name
           </div>
           <input
             {...register('lastName', { required: 'Last Name is required' })}
@@ -137,19 +169,21 @@ const Form = () => {
       {/* Phone Number */}
       <div>
         <div className='text-black font-semibold'>
-          Phone 
+          Phone
         </div>
         <input
-          {...register('phoneNumber',{
-            required:'Phone number is required',
-            onChange:e =>{
+          {...register('phoneNumber', {
+            required: 'Phone number is required',
+            onChange: e => {
               e.target.value = formatPhone(e.target.value)
             }
           })}
           placeholder='(123) 456-7890'
           className='w-full border border-gray-300 p-2'
         />
-        
+        {errors.phoneNumber && ( // Add error display for phone number
+          <p className="text-red-500 text-sm">{errors.phoneNumber.message}</p>
+        )}
       </div>
 
       {/* Address */}
@@ -180,6 +214,7 @@ const Form = () => {
           <option value="" disabled>
             Select a service
           </option>
+          {/* Ensure Service is correctly imported and has string values */}
           {Object.entries(Service).map(([key, value]) => (
             <option key={key} value={value}>
               {value}
