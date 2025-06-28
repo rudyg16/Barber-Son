@@ -88,21 +88,20 @@ const Form = () => {
     }
   };
 
-  const onSubmit = async (data: FormValues) => { // Make onSubmit async as well
-    // IMPORTANT CHANGE HERE:
-    // import.meta.env.VITE_API_BASE_PATH should hold "/api/"
-    // Then you append your specific resource path "/formsubmissions"
-    const apiEndpoint = `${import.meta.env.VITE_APP_API_BASE_PATH}formsubmissions`;
+  const onSubmit = async (data: FormValues) => {
+    // ---- THE CRITICAL CHANGE IS HERE ----
+    // This is the direct, default path to your Netlify Function.
+    // Replace 'handler' with your actual function filename if it's different.
+    const apiEndpoint = `/.netlify/functions/handler`; // <--- No /api/ prefix, no VITE_ variable
 
-    console.log("Resolved API Endpoint:", apiEndpoint); // This should now log "/api/formsubmissions"
-
+    console.log("Resolved API Endpoint:", apiEndpoint);
     try {
-      await submitFormData(apiEndpoint, data); // Pass the correct, relative API endpoint
-      reset(); // Clear the form on successful submission
-      alert('Your message has been sent successfully!'); // User feedback
-    } catch (error: any) { // Use 'any' for error type if not strictly defining custom errors
+      await submitFormData(apiEndpoint, data);
+      reset();
+      alert('Your message has been sent successfully!');
+    } catch (error: any) {
       console.error("Form submission failed:", error);
-      alert(`There was an issue submitting your form: ${error.message}`); // Inform user
+      alert(`There was an issue submitting your form: ${error.message}`);
     }
   };
 
