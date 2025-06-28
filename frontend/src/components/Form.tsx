@@ -92,7 +92,7 @@ const Form = () => {
     // IMPORTANT CHANGE HERE:
     // import.meta.env.VITE_API_BASE_PATH should hold "/api/"
     // Then you append your specific resource path "/formsubmissions"
-    const apiEndpoint = `${import.meta.env.VITE_API_BASE_PATH}formsubmissions`;
+    const apiEndpoint = `${import.meta.env.VITE_APP_API_BASE_PATH}formsubmissions`;
 
     console.log("Resolved API Endpoint:", apiEndpoint); // This should now log "/api/formsubmissions"
 
