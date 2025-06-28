@@ -1,25 +1,24 @@
 [build]
-base = "frontend"
-publish = "dist"
+base = "frontend"  # Your frontend code is in the 'frontend' directory
+publish = "dist"   # Your frontend build output is in 'frontend/dist'
 command = "npm run build"
 
+# --- Redirects (remain as they were) ---
 [[redirects]]
   from = "https://barberpressure.netlify.app/*"
   to = "https://barberpressure.com/:splat"
   status = 301
-  force = true # Ensures this redirect takes precedence over others
+  force = true
 
-# Catch-all for API routes and rewrite them to your single handler function
 [[redirects]]
-  from = "/api/formsubmissions"        # For collection actions (GET all, POST new)
-  to = "/.netlify/functions/handler" 
+  from = "/api/formsubmissions"
+  to = "/.netlify/functions/handler" # Still points to the /handler endpoint
   status = 200
 
 [[redirects]]
-  from = "/api/formsubmissions/*"      # For single item actions (GET, PATCH, DELETE by ID)
-  to = "/.netlify/functions/handler"  
+  from = "/api/formsubmissions/*"
+  to = "/.netlify/functions/handler"
   status = 200
-
 
 [functions]
-    directory = "backend"
+directory = "netlify/functions" 
