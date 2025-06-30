@@ -11,14 +11,15 @@ const Navbar:React.FC = () => {
             </img>
             </a>
             <div className='flex flex-row justify-between mx-6 gap-x-2 mt-2'>
-
+                <Link to='/services' className='text-black text-lg  font-medium bg-white px-6 py-3 hover:-translate-y-[2px] rounded-lg transition-all duration-300'>
+                    Services
+                </Link>
                 <Link to='/about' className='text-black text-lg font-medium bg-white px-6 py-3 hover:-translate-y-[2px] rounded-lg transition-all duration-300'>
                     About
                 </Link>
-                <Link to='/contact' className='text-black text-lg  font-medium bg-white px-6 py-3 hover:-translate-y-[2px] rounded-lg transition-all duration-300'>
-                    Contact Us
-                </Link>
-                <Link to='/quote' className='text-white text-center  text-lg font-medium bg-deep_blue px-6 py-3  rounded-full transition-all duration-300'>
+                
+                
+                <Link to='/quote' className='text-white text-center  text-lg font-medium bg-blue-700 hover:bg-blue-600 px-6 py-3  rounded-full transition-all duration-300'>
                     Get a Quote
                 </Link>
 
