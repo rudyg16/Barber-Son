@@ -41,7 +41,7 @@ const Form = () => {
   } = useForm<FormValues>({
     mode: 'onTouched',
   });
-
+//FORM POST FUNCTION
   const submitFormData = async (url: string, data: FormValues) => {
     try {
       console.log("Sending request to:", url);
