@@ -1,30 +1,9 @@
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const { SecretsManagerClient, GetSecretValueCommand } = require('@aws-sdk/client-secrets-manager');
 
 // Use module-scoped variables for MongoClient and DB connection
 // This allows Lambda to reuse the connection across warm invocations.
 let cachedMongoClient = null;
 let cachedDb = null;
-
-// Function to get the MongoDB URI from Secrets Manager
-async function getMongoUriFromSecretsManager(secretName, region) {
-    const client = new SecretsManagerClient({ region });
-    try {
-        const response = await client.send(
-            new GetSecretValueCommand({
-                SecretId: secretName,
-                VersionStage: "AWSCURRENT",
-            })
-        );
-        // Secrets Manager stores the secret string directly.
-        // If your secret is a JSON string, you might need to parse it,
-        // e.g., JSON.parse(response.SecretString).mongoUri
-        return response.SecretString;
-    } catch (error) {
-        console.error("Error fetching secret:", error);
-        throw new Error("Failed to retrieve database credentials.");
-    }
-}
 
 // Function to connect to MongoDB
 async function connectToMongoDB() {
@@ -35,16 +14,17 @@ async function connectToMongoDB() {
     }
 
     console.log('Establishing new MongoDB connection...');
-    const secretName = process.env.MONGO_URI_SECRET_NAME; // Get secret name from environment variable
-    const region = process.env.AWS_REGION || "us-east-1"; // Default region if not set
+    const MONGO_URI = process.env.MONGO_URI;
 
-    if (!secretName) {
-        throw new Error("MONGO_URI_SECRET_NAME environment variable is not set.");
+    if (!MONGO_URI) {
+        throw new Error("MONGO_URI environment variable is not set.");
     }
 
-    try {
-        const MONGO_URI = await getMongoUriFromSecretsManager(secretName, region);
+    // Log connection attempt (without exposing password)
+    const maskedUri = MONGO_URI.replace(/:([^:@]+)@/, ':****@');
+    console.log('Attempting to connect to:', maskedUri);
 
+    try {
         cachedMongoClient = new MongoClient(MONGO_URI, {
             serverApi: {
                 version: ServerApiVersion.v1,
@@ -53,17 +33,43 @@ async function connectToMongoDB() {
             },
             maxIdleTimeMS: 60000, // Close idle connections after 60 seconds
             maxPoolSize: 5,       // Max 5 connections in the pool
-            serverSelectionTimeoutMS: 5000, // 5 seconds timeout for server selection
+            serverSelectionTimeoutMS: 10000, // Increased to 10 seconds for better diagnostics
+            connectTimeoutMS: 10000, // 10 seconds timeout for initial connection
         });
 
+        console.log('MongoClient created, attempting connection...');
         await cachedMongoClient.connect();
+
+        // Test the connection
+        await cachedMongoClient.db("admin").command({ ping: 1 });
+        console.log('MongoDB ping successful.');
+
         // Replace "BarberSonDB" with the actual name of your MongoDB database
         cachedDb = cachedMongoClient.db("BarberSonDB");
-        console.log('MongoDB connected successfully.');
+        console.log('MongoDB connected successfully to database: BarberSonDB');
         return cachedDb;
     } catch (error) {
-        console.error("Failed to connect to MongoDB:", error);
-        throw new Error("Failed to connect to the database.");
+        console.error("Detailed MongoDB connection error:", {
+            name: error.name,
+            message: error.message,
+            code: error.code,
+            codeName: error.codeName,
+            stack: error.stack
+        });
+
+        // Provide more specific error messages
+        if (error.name === 'MongoServerSelectionError') {
+            console.error("Server selection failed. This usually indicates:");
+            console.error("1. Network connectivity issues (check VPC/subnet configuration)");
+            console.error("2. MongoDB Atlas IP whitelist doesn't include Lambda's IP");
+            console.error("3. Incorrect connection string");
+        } else if (error.name === 'MongoAuthenticationError') {
+            console.error("Authentication failed. Check username/password in connection string.");
+        } else if (error.name === 'MongoNetworkError') {
+            console.error("Network error. Check VPC configuration and MongoDB Atlas network access.");
+        }
+
+        throw new Error(`Failed to connect to the database: ${error.message}`);
     }
 }
 
@@ -72,22 +78,101 @@ exports.handler = async (event) => {
     let dbClient;
 
     try {
-        // Ensure the MongoDB connection is established or reused
-        dbClient = await connectToMongoDB();
-
         const httpMethod = event.httpMethod;
         const path = event.path;
+
+        // Test endpoints that don't require database connection
+        if (httpMethod === 'GET' && path === '/ip-check') {
+            const https = require('https');
+
+            return new Promise((resolve) => {
+                https.get('https://api.ipify.org', (res) => {
+                    let data = '';
+                    res.on('data', chunk => data += chunk);
+                    res.on('end', () => {
+                        resolve({
+                            statusCode: 200,
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Access-Control-Allow-Origin": "*",
+                            },
+                            body: JSON.stringify({
+                                lambdaPublicIP: data.trim(),
+                                timestamp: new Date().toISOString(),
+                                message: "Add this IP to MongoDB Atlas Network Access"
+                            }),
+                        });
+                    });
+                }).on('error', (error) => {
+                    resolve({
+                        statusCode: 500,
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Access-Control-Allow-Origin": "*",
+                        },
+                        body: JSON.stringify({
+                            error: "Failed to get public IP",
+                            details: error.message
+                        }),
+                    });
+                });
+            });
+        }
+
+        // Add connectivity test endpoint
+        else if (httpMethod === 'GET' && path === '/connectivity-test') {
+            const https = require('https');
+
+            return new Promise((resolve) => {
+                console.log('Testing basic internet connectivity...');
+                https.get('https://httpbin.org/ip', (res) => {
+                    let data = '';
+                    res.on('data', chunk => data += chunk);
+                    res.on('end', () => {
+                        console.log('Successfully reached external API');
+                        resolve({
+                            statusCode: 200,
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Access-Control-Allow-Origin": "*",
+                            },
+                            body: JSON.stringify({
+                                message: "Internet connectivity works",
+                                response: JSON.parse(data),
+                                timestamp: new Date().toISOString()
+                            }),
+                        });
+                    });
+                }).on('error', (error) => {
+                    console.error('Failed to reach external API:', error);
+                    resolve({
+                        statusCode: 500,
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Access-Control-Allow-Origin": "*",
+                        },
+                        body: JSON.stringify({
+                            message: "No internet connectivity",
+                            error: error.message
+                        }),
+                    });
+                });
+            });
+        }
+
+        // For all other endpoints, establish database connection
+        dbClient = await connectToMongoDB();
 
         // Only handle POST requests to a specific path, e.g., /formSubmission
         if (httpMethod === 'POST' && path === '/formSubmission') {
             const requestBody = event.body ? JSON.parse(event.body) : {};
 
-            if (Object.keys(requestBody).length === 0) {//Object.keys() returns an array of an objects enumerable string keyed property names
-                return {//So for a json it would return a string array of the keys for the key value pairs 
+            if (Object.keys(requestBody).length === 0) {
+                return {
                     statusCode: 400,
                     headers: {
                         "Content-Type": "application/json",
-                        "Access-Control-Allow-Origin": "https://barberpressure.com", // Adjust for production
+                        "Access-Control-Allow-Origin": "https://barberpressure.com",
                         "Access-Control-Allow-Methods": "POST,OPTIONS",
                         "Access-Control-Allow-Headers": "Content-Type"
                     },
@@ -108,7 +193,7 @@ exports.handler = async (event) => {
                 statusCode: 201, // 201 Created
                 headers: {
                     "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin": "*", // Adjust for production
+                    "Access-Control-Allow-Origin": "*",
                     "Access-Control-Allow-Methods": "POST,OPTIONS",
                     "Access-Control-Allow-Headers": "Content-Type"
                 },
@@ -118,19 +203,70 @@ exports.handler = async (event) => {
                 }),
             };
         }
-        else if(httpMethod == 'GET' && path == '/formSubmission/GET'){
-
+        else if (httpMethod == 'GET' && path == '/formSubmission/GET') {
+            // TODO: Implement GET logic
+            return {
+                statusCode: 200,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                },
+                body: JSON.stringify({ message: "GET endpoint not implemented yet." }),
+            };
         }
-        else if(httpMethod == 'PATCH' && path =='/formPatch') {
-
+        else if (httpMethod == 'PATCH' && path == '/formPatch') {
+            // TODO: Implement PATCH logic
+            return {
+                statusCode: 200,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                },
+                body: JSON.stringify({ message: "PATCH endpoint not implemented yet." }),
+            };
         }
+        // Add a diagnostic endpoint (remove this in production)
+        else if (httpMethod === 'GET' && path === '/diagnostic') {
+            try {
+                // Test basic connectivity
+                const collections = await dbClient.listCollections().toArray();
+                const dbStats = await dbClient.stats();
 
-        else if (httpMethod === 'OPTIONS' && path =='') {
+                return {
+                    statusCode: 200,
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Access-Control-Allow-Origin": "*",
+                    },
+                    body: JSON.stringify({
+                        message: "Database connection successful!",
+                        database: "BarberSonDB",
+                        collections: collections.map(c => c.name),
+                        dbSize: dbStats.dataSize,
+                        timestamp: new Date().toISOString()
+                    }),
+                };
+            } catch (diagError) {
+                console.error("Diagnostic error:", diagError);
+                return {
+                    statusCode: 500,
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Access-Control-Allow-Origin": "*",
+                    },
+                    body: JSON.stringify({
+                        message: "Database diagnostic failed",
+                        error: diagError.message
+                    }),
+                };
+            }
+        }
+        else if (httpMethod === 'OPTIONS' && path == '') {
             // Handle CORS preflight requests (Before browser sends actual request)
             return {
                 statusCode: 204, // No Content
                 headers: {
-                    "Access-Control-Allow-Origin": "https://barberpressure.com", // Must match the AllowedOrigins in template.yaml
+                    "Access-Control-Allow-Origin": "https://barberpressure.com",
                     "Access-Control-Allow-Methods": "POST,OPTIONS,GET,PATCH",
                     "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
                     "Access-Control-Max-Age": "300"
@@ -144,7 +280,7 @@ exports.handler = async (event) => {
                 statusCode: 405, // Method Not Allowed
                 headers: {
                     "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin": "*", // Adjust for production
+                    "Access-Control-Allow-Origin": "*",
                     "Access-Control-Allow-Methods": "POST,OPTIONS",
                     "Access-Control-Allow-Headers": "Content-Type"
                 },
@@ -158,8 +294,7 @@ exports.handler = async (event) => {
             statusCode: 500,
             headers: {
                 "Content-Type": "application/json",
-                "Access-Control-Allow-Origin": "*", // Adjust for production
-                "Access-Control-Allow-Methods": "POST,OPTIONS",
+                "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Headers": "Content-Type"
             },
             body: JSON.stringify({
@@ -168,5 +303,4 @@ exports.handler = async (event) => {
             }),
         };
     }
-    // No `finally` block for `mongoClient.close()` as we want to reuse the connection.
 };
