@@ -1,14 +1,14 @@
 [build]
-base = "frontend"  # Your frontend code is in the 'frontend' directory
-publish = "dist"   # Your frontend build output is in 'frontend/dist'
-command = "npm run build"
+  base = "frontend"
+  publish = "dist"
+  command = "npm run build"
 
 [dev]
-command = "npm run dev"
-port = 5173
-publish = "dist"
+  command = "npm run dev"
 
-# --- Redirects (remain as they were) ---
+[functions]
+  directory = "netlify/functions"
+
 [[redirects]]
   from = "https://barberpressure.netlify.app/*"
   to = "https://barberpressure.com/:splat"
@@ -22,8 +22,5 @@ publish = "dist"
 
 [[redirects]]
   from = "/api/formsubmissions/*"
-  to = "/.netlify/functions/submissions"
+  to = "/.netlify/functions/submissions/:splat"
   status = 200
-
-[functions]
-directory = "netlify/functions" 
