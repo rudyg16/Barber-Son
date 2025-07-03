@@ -1,30 +1,51 @@
 exports.handler = async (event, context) => {
+    // Add safety checks for undefined objects
+    const headers = event.headers || {};
+    const httpMethod = event.httpMethod || 'GET';
+
     const allowedOrigins = [
         'https://barberpressure.com',
         'https://www.barberpressure.com',
         'http://localhost:5173',
         'http://localhost:8888'
-    ]
+    ];
 
-    const origin = event.headers.origin;
+    const origin = headers.origin || headers.Origin || '';
     const isAllowedOrigin = allowedOrigins.includes(origin);
 
-    const headers = {
+    const corsHeaders = {
         'Access-Control-Allow-Origin': isAllowedOrigin ? origin : 'null',
         'Access-Control-Allow-Headers': 'Content-Type',
         'Access-Control-Allow-Methods': 'POST,GET,PATCH,DELETE,OPTIONS',
         'Access-Control-Max-Age': '86400'
     };
 
-    switch (event.httpMethod) {
+    // Add environment variable checks
+    const lambda_url = process.env.LAMBDA_MONGO_HANDLER_URL;
+    const api_key = process.env.API_KEY;
+
+    if (!lambda_url || !api_key) {
+        console.error('Missing environment variables:', {
+            lambda_url: !!lambda_url,
+            api_key: !!api_key
+        });
+    }
+
+    switch (httpMethod) {
         case 'POST':
             if (isAllowedOrigin) {
                 try {
+                    // Add safety check for event.body
+                    if (!event.body) {
+                        throw new Error('Request body is missing');
+                    }
+
                     const data = JSON.parse(event.body);
                     data.timestamp = new Date().toISOString();
 
-                    const lambda_url = process.env.LAMBDA_MONGO_HANDLER_URL;
-                    const api_key = process.env.API_KEY;
+                    if (!lambda_url || !api_key) {
+                        throw new Error('Missing environment variables');
+                    }
 
                     const response = await fetch(lambda_url, {
                         method: 'POST',
@@ -33,10 +54,10 @@ exports.handler = async (event, context) => {
                             'api_key': api_key
                         },
                         body: JSON.stringify(data)
-                    })
+                    });
 
                     if (!response.ok) {
-                        throw new Error(`Lambda responded with status:${response.status}`);
+                        throw new Error(`Lambda responded with status: ${response.status}`);
                     }
 
                     const result = await response.json();
@@ -48,40 +69,37 @@ exports.handler = async (event, context) => {
                             'Cache-Control': 'no-cache',
                         },
                         body: JSON.stringify({ success: true, data: result })
-                    }
+                    };
                 } catch (error) {
-                    console.log('Error:', error.message);
-                    // ADD THIS RETURN - this was missing!
+                    console.error('Error:', error.message);
                     return {
                         statusCode: 500,
                         headers: {
                             'Access-Control-Allow-Origin': origin,
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({ error: 'Internal server error' })
+                        body: JSON.stringify({ error: 'Internal server error', message: error.message })
                     };
                 }
             } else {
                 return {
                     statusCode: 403,
-                    headers,
+                    headers: corsHeaders,
                     body: JSON.stringify({ error: 'Origin not allowed' })
                 };
             }
 
         case 'GET':
-            // ADD RETURN - this was missing!
             return {
                 statusCode: 501,
-                headers,
+                headers: corsHeaders,
                 body: JSON.stringify({ error: 'GET not implemented yet' })
             };
 
         case 'DELETE':
-            // ADD RETURN - this was missing!
             return {
                 statusCode: 501,
-                headers,
+                headers: corsHeaders,
                 body: JSON.stringify({ error: 'DELETE not implemented yet' })
             };
 
@@ -89,23 +107,22 @@ exports.handler = async (event, context) => {
             if (isAllowedOrigin) {
                 return {
                     statusCode: 200,
-                    headers: headers,
+                    headers: corsHeaders,
                     body: ''
                 };
             } else {
                 return {
                     statusCode: 403,
-                    headers,
+                    headers: corsHeaders,
                     body: JSON.stringify({ error: 'Origin not allowed' })
                 };
             }
 
-        // ADD DEFAULT CASE - this was missing!
         default:
             return {
                 statusCode: 405,
-                headers,
+                headers: corsHeaders,
                 body: JSON.stringify({ error: 'Method not allowed' })
             };
     }
-}
+};

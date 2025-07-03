@@ -8,6 +8,8 @@
 
 [functions]
   directory = "netlify/functions"
+  
+[build.environment]
 
 [[redirects]]
   from = "https://barberpressure.netlify.app/*"
