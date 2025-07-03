@@ -92,7 +92,7 @@ const Form = () => {
     // ---- THE CRITICAL CHANGE IS HERE ----
     // This is the direct, default path to your Netlify Function.
     // Replace 'handler' with your actual function filename if it's different.
-    const apiEndpoint = `/.netlify/functions/handler`; // <--- No /api/ prefix, no VITE_ variable
+    const apiEndpoint = `/.netlify/functions/submissions`; // <--- No /api/ prefix, no VITE_ variable
 
     console.log("Resolved API Endpoint:", apiEndpoint);
     try {

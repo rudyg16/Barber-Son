@@ -3,6 +3,11 @@ base = "frontend"  # Your frontend code is in the 'frontend' directory
 publish = "dist"   # Your frontend build output is in 'frontend/dist'
 command = "npm run build"
 
+[dev]
+command = "npm run dev"
+port = 5173
+publish = "dist"
+
 # --- Redirects (remain as they were) ---
 [[redirects]]
   from = "https://barberpressure.netlify.app/*"

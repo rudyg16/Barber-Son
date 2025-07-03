@@ -2,8 +2,8 @@ exports.handler = async(event,context) {
     const allowedOrigins = [
         'https://barberpressure.com',
         'https://www.barberpressure.com',
-        'http://localhost:5173'
-
+        'http://localhost:5173',
+        'http://localhost:8888'
     ]
    
     const origin = event.headers.origin;
@@ -64,7 +64,7 @@ exports.handler = async(event,context) {
         break;
         case'GET':
         if(isAllowedOrigin){
-            
+
         }
         else{
             return {
