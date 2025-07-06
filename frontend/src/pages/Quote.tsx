@@ -2,6 +2,7 @@ import React from 'react'
 import Form from '@/components/Form'
 import { FaPhone, FaCheck } from "react-icons/fa";
 import { IoLocationSharp } from "react-icons/io5";
+import { MdOutlineAccessTimeFilled } from "react-icons/md";
 
 interface BulletProps {
     text: string;
@@ -54,6 +55,17 @@ const Quote: React.FC = () => {
                                             className='text-2xl text-deep_blue font-bold hover:text-blue-600 transition-colors'>
                                             (214) 997-3143
                                         </a>
+                                    </div>
+                                </div>
+                                <div className='flex items-center gap-4 p-4 bg-gray-50 rounded-lg'>
+                                    <div className='flex items-center justify-center w-12 h-12 bg-deep_blue rounded-full'>
+                                        <MdOutlineAccessTimeFilled size={22} className='text-white' />
+                                    </div>
+                                    <div>
+                                        <p className='text-sm text-gray-600'>Hours of Operation</p>
+                                        <p className='text-lg text-gray-800 font-semibold'>
+                                            9:00 AM - 2:30 PM
+                                        </p>
                                     </div>
                                 </div>
 

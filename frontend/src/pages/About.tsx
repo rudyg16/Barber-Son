@@ -70,7 +70,7 @@ const About: React.FC = () => {
                         
                         <p>
                             Though we're new to the industry, our commitment to excellence and customer satisfaction drives 
-                            everything we do. We use modern equipment and eco-friendly solutions to deliver professional 
+                            everything we do. We use modern equipment to deliver professional 
                             results that speak for themselves.
                         </p>
                         
@@ -119,8 +119,7 @@ const About: React.FC = () => {
                             <div>
                                 <h3 className="text-2xl font-semibold mb-6">Our Promise</h3>
                                 <ul className="space-y-3">
-                                    <Bullet text="Free estimates" />
-                                    <Bullet text="Eco-friendly cleaning solutions" />
+                                    <Bullet text="Free estimates"/>
                                     <Bullet text="Professional equipment" />
                                     <Bullet text="Flexible scheduling" />
                                     <Bullet text="100% satisfaction guarantee" />

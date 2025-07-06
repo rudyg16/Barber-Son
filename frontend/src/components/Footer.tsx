@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaClock, FaFacebook, FaInstagram } from 'react-icons/fa';
+import { MdOutlineAccessTimeFilled } from "react-icons/md";
 
 const Footer: React.FC = () => {
     return (
@@ -81,6 +82,12 @@ const Footer: React.FC = () => {
                                         className='text-white hover:text-logo_mint transition-colors duration-300 font-semibold'>
                                         (214) 997-3143
                                     </a>
+                                </div>
+                            </div>
+                            <div className='flex items-start gap-3'>
+                                <MdOutlineAccessTimeFilled className='text-logo_mint flex-shrink-0 mt-1' size={18} />
+                                <div className='text-gray-300'>
+                                    <p>9:00 AM - 2:30 PM</p>
                                 </div>
                             </div>
 
