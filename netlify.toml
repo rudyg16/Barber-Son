@@ -12,6 +12,11 @@
 [build.environment]
 
 [[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  
+[[redirects]]
   from = "https://barberpressure.netlify.app/*"
   to = "https://barberpressure.com/:splat"
   status = 301
