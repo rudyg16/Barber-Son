@@ -21,7 +21,7 @@ exports.handler = async (event, context) => {
     };
 
     // Add environment variable checks
-    const lambda_url = process.env.LAMBDA_MONGO_HANDLER_URL;
+    const lambda_url = process.env.API_GATEWAY_URL;
     const api_key = process.env.API_KEY;
 
     if (!lambda_url || !api_key) {
