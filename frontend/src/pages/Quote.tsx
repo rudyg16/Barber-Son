@@ -51,9 +51,9 @@ const Quote: React.FC = () => {
                                     </div>
                                     <div>
                                         <p className='text-sm text-gray-600'>Call for immediate service</p>
-                                        <a href='tel:+2149973143'
+                                        <a href='tel:+2142742762'
                                             className='text-2xl text-deep_blue font-bold hover:text-blue-600 transition-colors'>
-                                            (214) 997-3143
+                                            (214) 274-2762
                                         </a>
                                     </div>
                                 </div>
@@ -105,9 +105,9 @@ const Quote: React.FC = () => {
                             <p className='mb-4 opacity-90'>
                                 Call us now for immediate assistance
                             </p>
-                            <a href='tel:+2149973143'
+                            <a href='tel:+2142742762'
                                 className='bg-white text-deep_blue px-6 py-3 rounded-lg font-bold hover:bg-gray-100 transition-colors inline-block'>
-                                Call (214) 997-3143
+                                Call (214) 274-2762
                             </a>
                         </div>
                     </div>

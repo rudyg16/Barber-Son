@@ -172,12 +172,12 @@ const About: React.FC = () => {
                             </div>
                         </Link>
 
-                        <a href='tel:+2149973143'
+                        <a href='tel:+2142742762'
                             className='py-4 px-8 border-2 border-deep_blue rounded-xl text-deep_blue 
                                 hover:-translate-y-1 hover:bg-deep_blue hover:text-white transition-all duration-300'>
                             <div className='flex flex-row flex-nowrap gap-x-2 items-center'>
                                 <FaPhone size={20} />
-                                <div className='text-xl font-semibold font-roboto'>(214) 997-3143</div>
+                                <div className='text-xl font-semibold font-roboto'>(214) 274-2762</div>
                             </div>
                         </a>
                     </div>

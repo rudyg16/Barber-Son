@@ -78,9 +78,9 @@ const Footer: React.FC = () => {
                             <div className='flex items-center gap-3'>
                                 <FaPhone className='text-logo_mint flex-shrink-0' size={18} />
                                 <div>
-                                    <a href='tel:+2149973143'
+                                    <a href='tel:+2142742762'
                                         className='text-white hover:text-logo_mint transition-colors duration-300 font-semibold'>
-                                        (214) 997-3143
+                                        (214) 274-2762
                                     </a>
                                 </div>
                             </div>
@@ -126,7 +126,7 @@ const Footer: React.FC = () => {
                                 className='bg-logo_mint hover:bg-green-400 text-deep_blue px-8 py-3 rounded-lg font-bold transition-all duration-300 hover:-translate-y-1'>
                                 Get Free Quote
                             </Link>
-                            <a href='tel:+2149973143'
+                            <a href='tel:+2142742762'
                                 className='border-2 border-white text-white px-8 py-3 rounded-lg font-bold hover:bg-white hover:text-deep_blue transition-colors duration-300'>
                                 Call Now
                             </a>

@@ -46,11 +46,11 @@ const Home: React.FC = () => {
                                     <FaArrowRightLong size={22} className='group-hover:translate-x-1 mt-1 duration-500 transition-transform ' />
                                 </div>
                             </Link>
-                            <a href='tel:+2149973143' className='py-3 px-5 border border-white rounded-xl text-white mt-2 
+                            <a href='tel:+2142742762' className='py-3 px-5 border border-white rounded-xl text-white mt-2 
                             hover:-translate-y-1  hover:bg-white hover:bg-opacity-20 transition-transform duration-300'>
                                 <div className='flex flex-row flex-nowrap gap-x-2 w-full h-full mt-[2px]'>
                                     <FaPhone className='mt-[2px]' size={24} />
-                                    <div className=' font text-xl font-semibold font-roboto'>(214){' '}997-3143</div>
+                                    <div className=' font text-xl font-semibold font-roboto'>(214){' '}274-2762</div>
                                 </div>
 
                             </a>
