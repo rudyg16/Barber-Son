@@ -1,6 +1,6 @@
 const { MongoClient } = require('mongodb');
 const AWS = require('aws-sdk');
-const ses = new AWS.SES({region:'us-east-1'});
+const ses = new AWS.SES({ region: 'us-east-1' });
 
 let cachedClient = null;
 let cachedDB = null;
@@ -70,11 +70,11 @@ const createEmail = (data) => {
             Body: {
                 Html: {
                     Charset: "UTF-8",
-                    Data: `<h2>Hi, ${data.firstName}!</h2>
+                    Data: `<h3>Hi, ${data.firstName}!</h3>
                     <p>We've received your quote request for our ${data.service} service, and we'll be in touch shortly! </p>
                     <p>📞 <a href="tel:+1214274-2762">(214) 274-2762</a></p>
                     <p>📧 <a href="mailto:barberpressure@gmail.com">barberpressure@gmail.com</a></p>`
-                    
+
                 },
                 Text: {
                     Charset: "UTF-8",
@@ -86,8 +86,9 @@ const createEmail = (data) => {
                 Data: `Your ${data.service} quote request has been received`
             }
         },
-        ReplyToAddresses: ["barberpressure@gmail.com"]
-       };
+        ReplyToAddresses: ["barberpressure@gmail.com"],
+        Source: "autoreply@barberpressure.com"
+    };
 };
 
 const sendEmailSafely = async (emailParams) => {
@@ -112,7 +113,7 @@ const sendEmailSafely = async (emailParams) => {
 exports.handler = async (event) => {
     const httpMethod = event.requestContext?.http?.method || 'POST';
     const queryParams = getQueryParameters(event);
-    
+
 
     try {
         const db = await connectToDB();
@@ -277,4 +278,4 @@ exports.handler = async (event) => {
             })
         };
     }
-    };
+};
