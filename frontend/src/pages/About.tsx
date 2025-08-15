@@ -64,7 +64,7 @@ const About: React.FC = () => {
                     <div className="text-lg text-gray-700 leading-relaxed space-y-6 mb-12">
                         <p>
                             Barber and Son Pressure Washing is a <strong>family-owned business</strong> bringing fresh energy 
-                            and dedication to the Dallas area. As a father-son team, we understand the importance of trust, 
+                            and dedication to the Dallas area. As a family-run team, we understand the importance of trust, 
                             reliability, and treating every property like it's our own.
                         </p>
                         
